@@ -81,13 +81,29 @@ export function getLocalAvatarAsset(id, slug) {
  */
 export function getResidentAvatarUrl(resident) {
   if (!resident) return '';
-  const explicit = resident.image || resident.avatar;
-  if (explicit && String(explicit).trim() !== '') return explicit;
 
-  const slug = resident.slug || (resident.name ? resident.name.trim().toLowerCase().replace(/\s+/g, '-') : '');
+  // Helper to determine if a string looks like a usable URL/path (http(s), data:, or starts with / or ./)
+  const isLikelyUrl = (val) => {
+    if (!val || typeof val !== 'string') return false;
+    const v = val.trim();
+    if (v === '') return false;
+    return /^(https?:\/\/|data:|\/|\.\/)/i.test(v);
+  };
+
+  const explicit = resident.image || resident.avatar;
+  // Only use the explicit value if it looks like a real URL/path
+  if (isLikelyUrl(explicit)) {
+    return explicit.trim();
+  }
+
+  // If explicit is a flag like "local" or non-empty but not a URL, prefer local asset instead of returning it
+  const slug =
+    resident.slug ||
+    (resident.name ? resident.name.trim().toLowerCase().replace(/\s+/g, '-') : '');
   const local = getLocalAvatarAsset(resident.id, slug);
   if (local) return local;
 
+  // Fallback to deterministic placeholder
   return buildPlaceholderAvatar(resident.id || slug || resident.name, resident.name);
 }
 
