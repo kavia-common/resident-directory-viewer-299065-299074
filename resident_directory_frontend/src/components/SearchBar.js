@@ -24,8 +24,8 @@ function SearchBar({ value = '', onChange }) {
   }
 
   return (
-    <div className="search-bar" role="search">
-      <label htmlFor="resident-search" className="visually-hidden">
+    <div className="search-bar" role="search" aria-labelledby="search-label">
+      <label id="search-label" htmlFor="resident-search" className="visually-hidden">
         Search residents by name
       </label>
       <input
@@ -35,6 +35,8 @@ function SearchBar({ value = '', onChange }) {
         value={localValue}
         onChange={handleChange}
         aria-label="Search residents by name"
+        aria-controls="results-region"
+        aria-describedby="results-summary"
         autoComplete="off"
       />
     </div>

@@ -121,9 +121,9 @@ function ResidentListView() {
 
   // Accessible labels and controls
   return (
-    <div>
+    <div role="region" aria-labelledby="residents-heading">
       <div className="toolbar" style={{ alignItems: 'start' }}>
-        <h2 style={{ margin: 0 }}>Residents</h2>
+        <h2 id="residents-heading" style={{ margin: 0 }}>Residents</h2>
         <div role="group" aria-label="Sorting and filtering controls" style={{ display: 'grid', gap: 8 }}>
           {/* Sorting */}
           <div className="search-bar" style={{ padding: 6 }}>
@@ -161,6 +161,8 @@ function ResidentListView() {
               onChange={(e) => setUnitFilter(e.target.value)}
               aria-label="Filter by unit"
               autoComplete="off"
+              aria-describedby="results-summary"
+              aria-controls="results-region"
             />
           </div>
 
@@ -201,6 +203,7 @@ function ResidentListView() {
                       checked={checked}
                       onChange={() => handleTagToggle(tag)}
                       aria-label={`Filter by tag ${tag}`}
+                      aria-describedby="results-summary"
                       style={{ accentColor: 'var(--color-secondary)' }}
                     />
                     <span>{tag}</span>
@@ -214,6 +217,17 @@ function ResidentListView() {
 
       {/* Search input below heading/controls bar */}
       <SearchBar value={query} onChange={setQuery} />
+
+      {/* Live region for results summary */}
+      <p
+        id="results-summary"
+        role="status"
+        aria-live="polite"
+        style={{ marginTop: 12, marginBottom: 0, color: 'var(--muted)' }}
+      >
+        {results.length} {results.length === 1 ? 'result' : 'results'} found
+        {query ? ` for “${query}”` : ''}{unitFilter ? ` in unit “${unitFilter}”` : ''}{selectedTags.length ? ` with tags: ${selectedTags.join(', ')}` : ''}.
+      </p>
 
       {/* Active filters pills */}
       {(unitFilter || selectedTags.length > 0) && (
@@ -240,7 +254,10 @@ function ResidentListView() {
       )}
 
       <div style={{ height: 12 }} />
-      <ResidentList residents={results} />
+      {/* Region wrapper for results to connect aria-controls */}
+      <div id="results-region">
+        <ResidentList residents={results} />
+      </div>
     </div>
   );
 }

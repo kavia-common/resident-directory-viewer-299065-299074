@@ -13,7 +13,7 @@ function ResidentDetail() {
 
   if (!resident) {
     return (
-      <div className="empty" role="status">
+      <div className="empty" role="status" aria-live="polite">
         Resident not found.
         <div>
           <Link className="back-link" to="/">← Back to list</Link>
@@ -27,7 +27,7 @@ function ResidentDetail() {
   const alt = avatarAltText(resident.name);
 
   return (
-    <article className="detail">
+    <article className="detail" aria-labelledby="resident-name">
       <Link className="back-link" to="/">← Back to list</Link>
       <div className="detail-header">
         {avatarUrl ? (
@@ -43,25 +43,25 @@ function ResidentDetail() {
           <div className="detail-avatar" aria-hidden="true">{initials}</div>
         )}
         <div>
-          <h2>{resident.name}</h2>
+          <h2 id="resident-name">{resident.name}</h2>
           <div className="meta">Unit {resident.unit}</div>
         </div>
       </div>
 
-      <div className="kv">
-        <div className="kv-row">
+      <div className="kv" role="list">
+        <div className="kv-row" role="listitem">
           <div className="kv-label">Phone</div>
           <div>
             <a href={`tel:${resident.phone}`} aria-label={`Call ${resident.name}`}>{resident.phone}</a>
           </div>
         </div>
-        <div className="kv-row">
+        <div className="kv-row" role="listitem">
           <div className="kv-label">Email</div>
           <div>
             <a href={`mailto:${resident.email}`} aria-label={`Email ${resident.name}`}>{resident.email}</a>
           </div>
         </div>
-        <div className="kv-row">
+        <div className="kv-row" role="listitem">
           <div className="kv-label">Tags</div>
           <div className="tags">
             {resident.tags?.length ? resident.tags.map(t => <span key={t} className="tag">{t}</span>) : '—'}

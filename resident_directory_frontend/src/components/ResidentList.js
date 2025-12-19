@@ -9,14 +9,18 @@ import ResidentCard from './ResidentCard';
 function ResidentList({ residents }) {
   if (!residents || residents.length === 0) {
     return (
-      <div role="status" className="empty" aria-live="polite">
+      <div role="status" className="empty" aria-live="polite" id="results-live-region">
         No residents found. Try a different name.
       </div>
     );
   }
 
   return (
-    <section className="resident-grid" aria-label="Resident results">
+    <section
+      className="resident-grid"
+      aria-label="Resident results"
+      aria-describedby="results-summary"
+    >
       {residents.map((r) => (
         <ResidentCard key={r.id} resident={r} />
       ))}

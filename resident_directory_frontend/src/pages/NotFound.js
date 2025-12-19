@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
  */
 function NotFound() {
   return (
-    <div className="empty">
+    <div className="empty" role="status" aria-live="polite" aria-atomic="true">
       <h2 style={{ marginTop: 0 }}>404 - Not Found</h2>
       <p>We couldn't find that page.</p>
       <Link className="back-link" to="/">← Back to list</Link>

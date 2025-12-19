@@ -1,4 +1,5 @@
-/* Electric Orange Theme with Light/Dark support via [data-theme] on html */
+/* Electric Orange Theme with Light/Dark support via [data-theme] on html
+   Accessibility refinements: WCAG AA contrast, clearer focus outlines, and consistent tokens */
 :root {
   --color-primary: #F97316; /* Electric Orange */
   --color-primary-hover: #ea6a0a; /* darker hover for accessibility on dark */
@@ -11,11 +12,11 @@
   --color-success: #10B981;
   --color-error: #EF4444;
 
-  /* LIGHT THEME DEFAULTS (unchanged) */
+  /* LIGHT THEME DEFAULTS */
   --bg: #f9fafb;
   --surface: #ffffff;
   --text: #111827;
-  --muted: #6b7280;
+  --muted: #4b5563; /* slightly darker for stronger contrast on white */
 
   --ring: 2px solid var(--color-primary);
   --radius: 12px;
@@ -25,38 +26,41 @@
 
   /* Component-specific tokens that adjust per theme */
   --border-color: #e5e7eb;
-  --hover-border: #fda769;
+  --hover-border: #f97316; /* ensure visible focus/hover outline */
 
   --chip-bg: #ecfeff;
-  --chip-text: #155e75;
-  --chip-border: #cffafe;
+  --chip-text: #0f766e;  /* darken for AA on light */
+  --chip-border: #a5f3fc;
 
   --avatar-bg: #fff7ed;
-  --avatar-text: #9a3412;
-  --avatar-border: #fed7aa;
+  --avatar-text: #7c2d12;
+  --avatar-border: #fdba74;
   /* Subtle ring for list; slightly stronger for detail in light mode */
-  --avatar-ring: rgba(249,115,22,0.14);
-  --avatar-ring-lg: rgba(249,115,22,0.2);
+  --avatar-ring: rgba(249,115,22,0.18);
+  --avatar-ring-lg: rgba(249,115,22,0.26);
   /* No tint overlay in light mode */
   --avatar-overlay: transparent;
 
   /* Link tokens */
-  --link: #0ea5e9;
-  --link-visited: #7c3aed;
+  --link: #0c87c9;         /* improved AA contrast on white */
+  --link-visited: #6d28d9; /* purple 700 for better contrast */
 
   /* Button text colors */
   --on-primary: #ffffff;
   --on-secondary: #ffffff;
+
+  /* Focus outline color token */
+  --focus-outline: rgba(249,115,22,0.45);
 }
 
 /* DARK THEME OVERRIDES (refined for accessibility) */
 html[data-theme="dark"] {
-  /* Suggested palette within ranges: background #0b0f14–#111827, surface #161b22–#1f2937 */
+  /* Palette ensures AA contrast */
   --bg: #0b0f14;            /* deep slate/blue black */
   --surface: #161b22;       /* elevated surface */
   --surface-2: #1f2937;     /* higher elevation when needed */
   --text: #e5e7eb;          /* near-white for readability */
-  --muted: #9ca3af;         /* muted text maintaining >=4.5:1 on surface */
+  --muted: #cbd5e1;         /* lighter muted maintaining >=4.5:1 on surface */
 
   /* Dividers and borders */
   --border-color: #2a3441;  /* accessible divider on dark */
@@ -65,34 +69,33 @@ html[data-theme="dark"] {
   /* Focus ring uses Electric Orange for high visibility */
   --ring: 2px solid #F97316;
 
-  /* Shadows slightly stronger to separate dark surfaces */
+  /* Shadows separate dark surfaces */
   --shadow-sm: 0 1px 2px rgba(0,0,0,0.5);
   --shadow-md: 0 6px 14px rgba(0,0,0,0.55);
   --shadow-lg: 0 16px 32px rgba(0,0,0,0.6);
 
   /* Chips maintain contrast against dark */
-  --chip-bg: rgba(16,185,129,0.16);
-  --chip-text: #c7f9e9;
-  --chip-border: rgba(16,185,129,0.38);
+  --chip-bg: rgba(16,185,129,0.18);
+  --chip-text: #d1fae5;
+  --chip-border: rgba(16,185,129,0.42);
 
   /* Avatars pop on dark surfaces */
-  --avatar-bg: rgba(249,115,22,0.16);
+  --avatar-bg: rgba(249,115,22,0.2);
   --avatar-text: #ffedd5;
-  --avatar-border: rgba(249,115,22,0.5);
-  /* Slightly reduce ring intensity in dark for subtle separation without overpowering */
-  /* Dark mode rings: a bit clearer than light to maintain definition on dark surfaces */
-  --avatar-ring: rgba(249,115,22,0.26);
-  --avatar-ring-lg: rgba(249,115,22,0.3);
+  --avatar-border: rgba(249,115,22,0.55);
+  --avatar-ring: rgba(249,115,22,0.28);
+  --avatar-ring-lg: rgba(249,115,22,0.34);
   /* Provide a very subtle, theme-aware overlay to improve contrast for photos on dark */
   --avatar-overlay: linear-gradient(0deg, rgba(0,0,0,0.06), rgba(0,0,0,0.06));
 
-  /* Links on dark for readability */
+  /* Links on dark for readability (AA on #161b22) */
   --link: #38bdf8;
   --link-visited: #a78bfa;
 
-  /* Ensure button foregrounds */
   --on-primary: #ffffff;
   --on-secondary: #ffffff;
+
+  --focus-outline: rgba(249,115,22,0.55);
 }
 
 * { box-sizing: border-box; }
@@ -106,21 +109,21 @@ body {
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, Apple Color Emoji, Segoe UI Emoji;
   background: var(--bg);
   color: var(--text);
+  line-height: 1.5;
+}
+
+/* Focus outline baseline for all focusable elements */
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--focus-outline);
+  border-radius: 6px;
 }
 
 /* Links with accessible colors and visited states */
-a {
-  color: var(--link);
-}
-a:visited {
-  color: var(--link-visited);
-}
-.card a, .back-link {
-  color: var(--link);
-}
-.card a:visited, .back-link:visited {
-  color: var(--link-visited);
-}
+a { color: var(--link); }
+a:visited { color: var(--link-visited); }
+.card a, .back-link { color: var(--link); }
+.card a:visited, .back-link:visited { color: var(--link-visited); }
 
 .app-shell {
   min-height: 100%;
@@ -162,7 +165,7 @@ header.app-header {
 }
 
 .brand h1 {
-  font-size: 18px;
+  font-size: 20px;
   margin: 0;
 }
 
@@ -171,7 +174,7 @@ main.app-main {
   max-width: 1100px;
   margin: 0 auto;
   width: 100%;
-  padding: 16px;
+  padding: 20px 16px;
 }
 
 /* SearchBar */
@@ -200,7 +203,7 @@ main.app-main {
   opacity: 1; /* ensure good contrast vs background */
 }
 .search-bar:focus-within {
-  box-shadow: 0 0 0 3px rgba(249,115,22,0.35), var(--shadow-md);
+  box-shadow: 0 0 0 3px var(--focus-outline), var(--shadow-md);
   border-color: var(--hover-border);
 }
 
@@ -229,13 +232,8 @@ main.app-main {
   box-shadow: var(--shadow-md); 
   border-color: var(--hover-border);
 }
-.theme-toggle:active {
-  transform: translateY(0.5px);
-}
-.theme-toggle:focus-visible { 
-  outline: none; 
-  box-shadow: 0 0 0 3px rgba(249,115,22,0.45);
-}
+.theme-toggle:active { transform: translateY(0.5px); }
+.theme-toggle:focus-visible { box-shadow: 0 0 0 3px var(--focus-outline); }
 
 /* Grid */
 .resident-grid {
@@ -264,9 +262,7 @@ main.app-main {
   border-color: var(--hover-border);
   box-shadow: var(--shadow-md);
 }
-.card a {
-  text-decoration: none;
-}
+.card a { text-decoration: none; }
 
 /* Header row in card */
 .card-header {
@@ -276,15 +272,12 @@ main.app-main {
 }
 
 /* Avatars */
-/* Shared avatar base variables used for both image and initials placeholder */
 .avatar {
-  /* Slightly smaller ring for list view avatars for subtlety */
   --avatar-ring-size: 1.5px;
-  --avatar-tint: transparent; /* default no tint on light */
+  --avatar-tint: transparent;
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  /* Use avatar theme tokens so both images and placeholders match theme */
   background: var(--avatar-bg);
   color: var(--avatar-text);
   display: grid;
@@ -292,21 +285,13 @@ main.app-main {
   font-weight: 700;
   border: 1px solid var(--avatar-border);
   object-fit: cover;
-  /* Use box-shadow to render the outer ring. Keep Electric Orange via theme vars */
   box-shadow: 0 0 0 var(--avatar-ring-size) var(--avatar-ring);
   position: relative;
-  overflow: hidden; /* allow pseudo overlay to be clipped to rounded corners */
-
-  /* Interaction: gentle scale + ring glow on hover/focus-within with reduced motion respect */
+  overflow: hidden;
   transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
 
-/* Theme-aware subtle overlay/tint only in dark mode using a pseudo-element.
-   This maintains image detail while improving separation on dark surfaces.
-   For placeholders (divs with initials), the overlay keeps parity with image avatars. */
-html[data-theme="dark"] .avatar {
-  --avatar-tint: var(--avatar-overlay);
-}
+html[data-theme="dark"] .avatar { --avatar-tint: var(--avatar-overlay); }
 html[data-theme="dark"] .avatar::after {
   content: "";
   position: absolute;
@@ -315,22 +300,21 @@ html[data-theme="dark"] .avatar::after {
   pointer-events: none;
 }
 
-/* Hover/focus effects applied to the avatar itself and when the card/link is focused */
+/* Hover/focus effects */
 .card a:hover .avatar,
 .card a:focus .avatar,
 .card a:focus-visible .avatar,
 .avatar:hover,
 .avatar:focus,
 .avatar:focus-visible {
-  /* Keep clear focus outlines: use box-shadow for glow; do not remove default outline unless focus-visible provided */
   box-shadow:
     0 0 0 var(--avatar-ring-size) var(--avatar-ring),
-    0 0 0 calc(var(--avatar-ring-size) + 2px) rgba(249,115,22,0.18);
+    0 0 0 calc(var(--avatar-ring-size) + 2px) var(--focus-outline);
   transform: translateZ(0) scale(1.02);
   border-color: var(--hover-border);
 }
 
-/* Stronger glow for detail avatar */
+/* Detail avatar emphasis */
 .card a:hover .detail-avatar,
 .card a:focus .detail-avatar,
 .card a:focus-visible .detail-avatar,
@@ -339,12 +323,12 @@ html[data-theme="dark"] .avatar::after {
 .detail-avatar:focus-visible {
   box-shadow:
     0 0 0 var(--avatar-ring-size) var(--avatar-ring-lg),
-    0 0 0 calc(var(--avatar-ring-size) + 2px) rgba(249,115,22,0.22);
+    0 0 0 calc(var(--avatar-ring-size) + 2px) var(--focus-outline);
   transform: translateZ(0) scale(1.015);
   border-color: var(--hover-border);
 }
 
-/* Respect reduced motion preference */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .avatar,
   .detail-avatar {
@@ -372,7 +356,7 @@ html[data-theme="dark"] .avatar::after {
 }
 .tag {
   font-size: 12px;
-  padding: 4px 8px;
+  padding: 6px 10px; /* slightly more padding for tap target */
   background: var(--chip-bg);
   color: var(--chip-text);
   border: 1px solid var(--chip-border);
@@ -403,13 +387,11 @@ html[data-theme="dark"] .avatar::after {
   align-items: center;
 }
 .detail-avatar {
-  /* Slightly thicker ring on detail to communicate emphasis */
   --avatar-ring-size: 3px;
-  --avatar-tint: transparent; /* default no tint on light */
+  --avatar-tint: transparent;
   width: 72px;
   height: 72px;
   border-radius: 16px;
-  /* Use avatar theme tokens so both images and placeholders match theme */
   background: var(--avatar-bg);
   color: var(--avatar-text);
   display: grid;
@@ -418,19 +400,13 @@ html[data-theme="dark"] .avatar::after {
   font-size: 24px; /* large text meets >=3:1 */
   border: 1px solid var(--avatar-border);
   object-fit: cover;
-  /* Larger ring for detail view using theme-aware color (slightly higher opacity var in dark) */
   box-shadow: 0 0 0 var(--avatar-ring-size) var(--avatar-ring-lg);
   position: relative;
   overflow: hidden;
-
-  /* Align transitions with list avatars for consistent interactions */
   transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
 
-/* Subtle tint in dark mode for detail avatar as well */
-html[data-theme="dark"] .detail-avatar {
-  --avatar-tint: var(--avatar-overlay);
-}
+html[data-theme="dark"] .detail-avatar { --avatar-tint: var(--avatar-overlay); }
 html[data-theme="dark"] .detail-avatar::after {
   content: "";
   position: absolute;
@@ -439,18 +415,16 @@ html[data-theme="dark"] .detail-avatar::after {
   pointer-events: none;
 }
 
-.detail h2 {
-  margin: 0 0 4px 0;
-}
+.detail h2 { margin: 0 0 6px 0; }
 .kv {
   margin-top: 16px;
   display: grid;
-  gap: 6px;
+  gap: 8px;
 }
 .kv-row {
   display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 8px;
+  grid-template-columns: 140px 1fr;
+  gap: 10px;
 }
 .kv-label {
   color: var(--muted);
@@ -461,25 +435,25 @@ html[data-theme="dark"] .detail-avatar::after {
 }
 .back-link:focus-visible { 
   outline: none; 
-  box-shadow: 0 0 0 3px rgba(249,115,22,0.45);
+  box-shadow: 0 0 0 3px var(--focus-outline);
 }
 
-/* High contrast preference: slightly increase contrast in dark */
+/* High contrast preference */
 @media (prefers-contrast: more) {
   html[data-theme="dark"] {
-    --muted: #b5bcc7;
-    --border-color: #324055;
+    --muted: #e2e8f0;
+    --border-color: #38485e;
     --shadow-sm: 0 1px 2px rgba(0,0,0,0.6);
     --shadow-md: 0 6px 14px rgba(0,0,0,0.62);
   }
   .search-bar:focus-within,
   .theme-toggle:focus-visible,
   .back-link:focus-visible {
-    box-shadow: 0 0 0 4px rgba(249,115,22,0.55);
+    box-shadow: 0 0 0 4px var(--focus-outline);
   }
 }
 
-/* Utility */
+/* Visually hidden utility */
 .visually-hidden {
   position: absolute !important;
   height: 1px; width: 1px;
