@@ -1,18 +1,62 @@
-/* Electric Orange Theme */
+/* Electric Orange Theme with Light/Dark support via [data-theme] on html */
 :root {
   --color-primary: #F97316; /* Electric Orange */
   --color-secondary: #10B981; /* Emerald */
   --color-success: #10B981;
   --color-error: #EF4444;
-  --bg: #f9fafb; /* background */
-  --surface: #ffffff; /* surface */
-  --text: #111827; /* text */
+
+  /* LIGHT THEME DEFAULTS */
+  --bg: #f9fafb;
+  --surface: #ffffff;
+  --text: #111827;
   --muted: #6b7280;
+
   --ring: 2px solid var(--color-primary);
   --radius: 12px;
   --shadow-sm: 0 1px 2px rgba(0,0,0,0.06);
   --shadow-md: 0 4px 10px rgba(17,24,39,0.08);
   --shadow-lg: 0 12px 24px rgba(17,24,39,0.12);
+
+  /* Component-specific tokens that adjust per theme */
+  --border-color: #e5e7eb;
+  --hover-border: #fda769;
+
+  --chip-bg: #ecfeff;
+  --chip-text: #155e75;
+  --chip-border: #cffafe;
+
+  --avatar-bg: #fff7ed;
+  --avatar-text: #9a3412;
+  --avatar-border: #fed7aa;
+  --avatar-ring: rgba(249,115,22,0.15);
+  --avatar-ring-lg: rgba(249,115,22,0.18);
+}
+
+/* DARK THEME OVERRIDES */
+html[data-theme="dark"] {
+  --bg: #0b1020;           /* very dark blue-tinted */
+  --surface: #121a2b;      /* dark elevated surface */
+  --text: #f5f7fa;         /* near-white for readability */
+  --muted: #c0c8d4;        /* softer but readable */
+
+  --border-color: #22304a; /* subtle border on dark */
+  --hover-border: #fb923c; /* maintain orange hue pop */
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
+  --shadow-md: 0 6px 14px rgba(0,0,0,0.45);
+  --shadow-lg: 0 16px 32px rgba(0,0,0,0.5);
+
+  /* Chips maintain contrast against dark */
+  --chip-bg: rgba(16,185,129,0.15);  /* Emerald tint background */
+  --chip-text: #a7f3d0;              /* Mint text for contrast */
+  --chip-border: rgba(16,185,129,0.35);
+
+  /* Avatars pop on dark surfaces */
+  --avatar-bg: rgba(249,115,22,0.15);
+  --avatar-text: #ffedd5;
+  --avatar-border: rgba(249,115,22,0.45);
+  --avatar-ring: rgba(249,115,22,0.25);
+  --avatar-ring-lg: rgba(249,115,22,0.32);
 }
 
 * { box-sizing: border-box; }
@@ -38,7 +82,7 @@ a { color: inherit; }
 
 header.app-header {
   background: var(--surface);
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
   box-shadow: var(--shadow-sm);
   position: sticky;
   top: 0;
@@ -84,7 +128,7 @@ main.app-main {
 
 .search-bar {
   background: var(--surface);
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
   border-radius: var(--radius);
   padding: 8px 12px;
   display: flex;
@@ -105,7 +149,7 @@ main.app-main {
 
 .search-bar:focus-within {
   box-shadow: var(--shadow-md);
-  border-color: #fda769;
+  border-color: var(--hover-border);
 }
 
 .toolbar {
@@ -116,14 +160,18 @@ main.app-main {
   margin: 20px 0;
 }
 
+/* Theme toggle reuses variables for accessible contrast */
 .theme-toggle {
   background: var(--surface);
   color: var(--text);
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 10px 14px;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 .theme-toggle:hover { box-shadow: var(--shadow-md); }
 .theme-toggle:focus-visible { outline: var(--ring); }
@@ -142,7 +190,7 @@ main.app-main {
 
 .card {
   background: var(--surface);
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 16px;
   box-shadow: var(--shadow-sm);
@@ -150,7 +198,7 @@ main.app-main {
 }
 .card:hover {
   transform: translateY(-2px);
-  border-color: #fda769;
+  border-color: var(--hover-border);
   box-shadow: var(--shadow-md);
 }
 .card a {
@@ -168,14 +216,14 @@ main.app-main {
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  background: #fff7ed;
-  color: #9a3412;
+  background: var(--avatar-bg);
+  color: var(--avatar-text);
   display: grid;
   place-items: center;
   font-weight: 700;
-  border: 1px solid #fed7aa;
+  border: 1px solid var(--avatar-border);
   object-fit: cover;
-  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.15);
+  box-shadow: 0 0 0 2px var(--avatar-ring);
 }
 
 .card h3 {
@@ -197,15 +245,15 @@ main.app-main {
 .tag {
   font-size: 12px;
   padding: 4px 8px;
-  background: #ecfeff;
-  color: #155e75;
-  border: 1px solid #cffafe;
+  background: var(--chip-bg);
+  color: var(--chip-text);
+  border: 1px solid var(--chip-border);
   border-radius: 999px;
 }
 
 .empty {
   background: var(--surface);
-  border: 1px dashed #e5e7eb;
+  border: 1px dashed var(--border-color);
   border-radius: 12px;
   padding: 24px;
   text-align: center;
@@ -214,7 +262,7 @@ main.app-main {
 
 .detail {
   background: var(--surface);
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 20px;
   box-shadow: var(--shadow-sm);
@@ -229,15 +277,15 @@ main.app-main {
   width: 72px;
   height: 72px;
   border-radius: 16px;
-  background: #fff7ed;
-  color: #9a3412;
+  background: var(--avatar-bg);
+  color: var(--avatar-text);
   display: grid;
   place-items: center;
   font-weight: 800;
   font-size: 24px;
-  border: 1px solid #fed7aa;
+  border: 1px solid var(--avatar-border);
   object-fit: cover;
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.18);
+  box-shadow: 0 0 0 3px var(--avatar-ring-lg);
 }
 
 .detail h2 {
