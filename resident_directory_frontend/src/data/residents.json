@@ -1,0 +1,47 @@
+[
+  {
+    "id": "1",
+    "name": "Alice Johnson",
+    "unit": "A-101",
+    "phone": "555-123-4567",
+    "email": "alice.johnson@example.com",
+    "tags": ["Board", "Pet Owner"],
+    "avatar": ""
+  },
+  {
+    "id": "2",
+    "name": "Bob Smith",
+    "unit": "B-202",
+    "phone": "555-987-6543",
+    "email": "bob.smith@example.com",
+    "tags": ["Gym", "EV Parking"],
+    "avatar": ""
+  },
+  {
+    "id": "3",
+    "name": "Carlos Alvarez",
+    "unit": "C-303",
+    "phone": "555-555-1212",
+    "email": "carlos.alvarez@example.com",
+    "tags": ["Garden Club"],
+    "avatar": ""
+  },
+  {
+    "id": "4",
+    "name": "Diana Lee",
+    "unit": "D-404",
+    "phone": "555-321-4321",
+    "email": "diana.lee@example.com",
+    "tags": ["Pet Owner", "Pool"],
+    "avatar": ""
+  },
+  {
+    "id": "5",
+    "name": "Ethan Patel",
+    "unit": "E-505",
+    "phone": "555-246-8101",
+    "email": "ethan.patel@example.com",
+    "tags": ["EV Parking"],
+    "avatar": ""
+  }
+]
