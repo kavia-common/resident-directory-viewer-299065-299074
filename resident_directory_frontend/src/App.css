@@ -1,11 +1,17 @@
 /* Electric Orange Theme with Light/Dark support via [data-theme] on html */
 :root {
   --color-primary: #F97316; /* Electric Orange */
+  --color-primary-hover: #ea6a0a; /* darker hover for accessibility on dark */
+  --color-primary-active: #c4550a;
+
   --color-secondary: #10B981; /* Emerald */
+  --color-secondary-hover: #0ea371;
+  --color-secondary-active: #0b7f59;
+
   --color-success: #10B981;
   --color-error: #EF4444;
 
-  /* LIGHT THEME DEFAULTS */
+  /* LIGHT THEME DEFAULTS (unchanged) */
   --bg: #f9fafb;
   --surface: #ffffff;
   --text: #111827;
@@ -30,33 +36,56 @@
   --avatar-border: #fed7aa;
   --avatar-ring: rgba(249,115,22,0.15);
   --avatar-ring-lg: rgba(249,115,22,0.18);
+
+  /* Link tokens */
+  --link: #0ea5e9;
+  --link-visited: #7c3aed;
+
+  /* Button text colors */
+  --on-primary: #ffffff;
+  --on-secondary: #ffffff;
 }
 
-/* DARK THEME OVERRIDES */
+/* DARK THEME OVERRIDES (refined for accessibility) */
 html[data-theme="dark"] {
-  --bg: #0b1020;           /* very dark blue-tinted */
-  --surface: #121a2b;      /* dark elevated surface */
-  --text: #f5f7fa;         /* near-white for readability */
-  --muted: #c0c8d4;        /* softer but readable */
+  /* Suggested palette within ranges: background #0b0f14–#111827, surface #161b22–#1f2937 */
+  --bg: #0b0f14;            /* deep slate/blue black */
+  --surface: #161b22;       /* elevated surface */
+  --surface-2: #1f2937;     /* higher elevation when needed */
+  --text: #e5e7eb;          /* near-white for readability */
+  --muted: #9ca3af;         /* muted text maintaining >=4.5:1 on surface */
 
-  --border-color: #22304a; /* subtle border on dark */
-  --hover-border: #fb923c; /* maintain orange hue pop */
+  /* Dividers and borders */
+  --border-color: #2a3441;  /* accessible divider on dark */
+  --hover-border: #fb923c;  /* orange pop on focus/hover */
 
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
-  --shadow-md: 0 6px 14px rgba(0,0,0,0.45);
-  --shadow-lg: 0 16px 32px rgba(0,0,0,0.5);
+  /* Focus ring uses Electric Orange for high visibility */
+  --ring: 2px solid #F97316;
+
+  /* Shadows slightly stronger to separate dark surfaces */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.5);
+  --shadow-md: 0 6px 14px rgba(0,0,0,0.55);
+  --shadow-lg: 0 16px 32px rgba(0,0,0,0.6);
 
   /* Chips maintain contrast against dark */
-  --chip-bg: rgba(16,185,129,0.15);  /* Emerald tint background */
-  --chip-text: #a7f3d0;              /* Mint text for contrast */
-  --chip-border: rgba(16,185,129,0.35);
+  --chip-bg: rgba(16,185,129,0.16);
+  --chip-text: #c7f9e9;
+  --chip-border: rgba(16,185,129,0.38);
 
   /* Avatars pop on dark surfaces */
-  --avatar-bg: rgba(249,115,22,0.15);
+  --avatar-bg: rgba(249,115,22,0.16);
   --avatar-text: #ffedd5;
-  --avatar-border: rgba(249,115,22,0.45);
-  --avatar-ring: rgba(249,115,22,0.25);
-  --avatar-ring-lg: rgba(249,115,22,0.32);
+  --avatar-border: rgba(249,115,22,0.5);
+  --avatar-ring: rgba(249,115,22,0.3);
+  --avatar-ring-lg: rgba(249,115,22,0.36);
+
+  /* Links on dark for readability */
+  --link: #38bdf8;
+  --link-visited: #a78bfa;
+
+  /* Ensure button foregrounds */
+  --on-primary: #ffffff;
+  --on-secondary: #ffffff;
 }
 
 * { box-sizing: border-box; }
@@ -72,7 +101,19 @@ body {
   color: var(--text);
 }
 
-a { color: inherit; }
+/* Links with accessible colors and visited states */
+a {
+  color: var(--link);
+}
+a:visited {
+  color: var(--link-visited);
+}
+.card a, .back-link {
+  color: var(--link);
+}
+.card a:visited, .back-link:visited {
+  color: var(--link-visited);
+}
 
 .app-shell {
   min-height: 100%;
@@ -126,6 +167,7 @@ main.app-main {
   padding: 16px;
 }
 
+/* SearchBar */
 .search-bar {
   background: var(--surface);
   border: 1px solid var(--border-color);
@@ -136,7 +178,6 @@ main.app-main {
   gap: 8px;
   box-shadow: var(--shadow-sm);
 }
-
 .search-bar input {
   border: none;
   outline: none;
@@ -145,13 +186,18 @@ main.app-main {
   font-size: 16px;
   background: transparent;
   color: var(--text);
+  caret-color: var(--color-primary);
 }
-
+.search-bar input::placeholder {
+  color: var(--muted);
+  opacity: 1; /* ensure good contrast vs background */
+}
 .search-bar:focus-within {
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 0 0 3px rgba(249,115,22,0.35), var(--shadow-md);
   border-color: var(--hover-border);
 }
 
+/* Toolbar & theme toggle */
 .toolbar {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -160,7 +206,6 @@ main.app-main {
   margin: 20px 0;
 }
 
-/* Theme toggle reuses variables for accessible contrast */
 .theme-toggle {
   background: var(--surface);
   color: var(--text);
@@ -173,9 +218,19 @@ main.app-main {
   align-items: center;
   gap: 8px;
 }
-.theme-toggle:hover { box-shadow: var(--shadow-md); }
-.theme-toggle:focus-visible { outline: var(--ring); }
+.theme-toggle:hover { 
+  box-shadow: var(--shadow-md); 
+  border-color: var(--hover-border);
+}
+.theme-toggle:active {
+  transform: translateY(0.5px);
+}
+.theme-toggle:focus-visible { 
+  outline: none; 
+  box-shadow: 0 0 0 3px rgba(249,115,22,0.45);
+}
 
+/* Grid */
 .resident-grid {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -188,6 +243,7 @@ main.app-main {
   .resident-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
+/* Cards */
 .card {
   background: var(--surface);
   border: 1px solid var(--border-color);
@@ -203,15 +259,16 @@ main.app-main {
 }
 .card a {
   text-decoration: none;
-  color: inherit;
 }
 
+/* Header row in card */
 .card-header {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
+/* Avatars */
 .avatar {
   width: 48px;
   height: 48px;
@@ -228,7 +285,7 @@ main.app-main {
 
 .card h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: 18px; /* large text meets >=3:1 */
 }
 
 .meta {
@@ -236,6 +293,7 @@ main.app-main {
   font-size: 14px;
 }
 
+/* Tags/Chips */
 .tags {
   display: flex;
   flex-wrap: wrap;
@@ -251,6 +309,7 @@ main.app-main {
   border-radius: 999px;
 }
 
+/* Empty & detail containers */
 .empty {
   background: var(--surface);
   border: 1px dashed var(--border-color);
@@ -282,7 +341,7 @@ main.app-main {
   display: grid;
   place-items: center;
   font-weight: 800;
-  font-size: 24px;
+  font-size: 24px; /* large text meets >=3:1 */
   border: 1px solid var(--avatar-border);
   object-fit: cover;
   box-shadow: 0 0 0 3px var(--avatar-ring-lg);
@@ -307,10 +366,28 @@ main.app-main {
 .back-link {
   display: inline-block;
   margin-bottom: 12px;
-  color: var(--color-primary);
 }
-.back-link:focus-visible { outline: var(--ring); }
+.back-link:focus-visible { 
+  outline: none; 
+  box-shadow: 0 0 0 3px rgba(249,115,22,0.45);
+}
 
+/* High contrast preference: slightly increase contrast in dark */
+@media (prefers-contrast: more) {
+  html[data-theme="dark"] {
+    --muted: #b5bcc7;
+    --border-color: #324055;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.6);
+    --shadow-md: 0 6px 14px rgba(0,0,0,0.62);
+  }
+  .search-bar:focus-within,
+  .theme-toggle:focus-visible,
+  .back-link:focus-visible {
+    box-shadow: 0 0 0 4px rgba(249,115,22,0.55);
+  }
+}
+
+/* Utility */
 .visually-hidden {
   position: absolute !important;
   height: 1px; width: 1px;
