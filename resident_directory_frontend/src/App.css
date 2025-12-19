@@ -36,6 +36,8 @@
   --avatar-border: #fed7aa;
   --avatar-ring: rgba(249,115,22,0.15);
   --avatar-ring-lg: rgba(249,115,22,0.18);
+  /* No tint overlay in light mode */
+  --avatar-overlay: transparent;
 
   /* Link tokens */
   --link: #0ea5e9;
@@ -76,8 +78,11 @@ html[data-theme="dark"] {
   --avatar-bg: rgba(249,115,22,0.16);
   --avatar-text: #ffedd5;
   --avatar-border: rgba(249,115,22,0.5);
-  --avatar-ring: rgba(249,115,22,0.3);
-  --avatar-ring-lg: rgba(249,115,22,0.36);
+  /* Slightly reduce ring intensity in dark for subtle separation without overpowering */
+  --avatar-ring: rgba(249,115,22,0.24);
+  --avatar-ring-lg: rgba(249,115,22,0.28);
+  /* Provide a very subtle, theme-aware overlay to improve contrast for photos on dark */
+  --avatar-overlay: linear-gradient(0deg, rgba(0,0,0,0.06), rgba(0,0,0,0.06));
 
   /* Links on dark for readability */
   --link: #38bdf8;
@@ -269,7 +274,10 @@ main.app-main {
 }
 
 /* Avatars */
+/* Shared avatar base variables used for both image and initials placeholder */
 .avatar {
+  --avatar-ring-size: 2px;
+  --avatar-tint: transparent; /* default no tint on light */
   width: 48px;
   height: 48px;
   border-radius: 12px;
@@ -280,7 +288,23 @@ main.app-main {
   font-weight: 700;
   border: 1px solid var(--avatar-border);
   object-fit: cover;
-  box-shadow: 0 0 0 2px var(--avatar-ring);
+  /* Use box-shadow to render the outer ring. Keep Electric Orange in light via var --avatar-ring */
+  box-shadow: 0 0 0 var(--avatar-ring-size) var(--avatar-ring);
+  position: relative;
+  overflow: hidden; /* allow pseudo overlay to be clipped to rounded corners */
+}
+
+/* Apply a subtle overlay/tint only in dark mode using a pseudo-element.
+   This maintains image detail while improving separation on dark surfaces. */
+html[data-theme="dark"] .avatar {
+  --avatar-tint: var(--avatar-overlay);
+}
+html[data-theme="dark"] .avatar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--avatar-tint, transparent);
+  pointer-events: none;
 }
 
 .card h3 {
@@ -333,6 +357,8 @@ main.app-main {
   align-items: center;
 }
 .detail-avatar {
+  --avatar-ring-size: 3px;
+  --avatar-tint: transparent; /* default no tint on light */
   width: 72px;
   height: 72px;
   border-radius: 16px;
@@ -344,7 +370,22 @@ main.app-main {
   font-size: 24px; /* large text meets >=3:1 */
   border: 1px solid var(--avatar-border);
   object-fit: cover;
-  box-shadow: 0 0 0 3px var(--avatar-ring-lg);
+  /* Larger ring for detail view using theme-aware color */
+  box-shadow: 0 0 0 var(--avatar-ring-size) var(--avatar-ring-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle tint in dark mode for detail avatar as well */
+html[data-theme="dark"] .detail-avatar {
+  --avatar-tint: var(--avatar-overlay);
+}
+html[data-theme="dark"] .detail-avatar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--avatar-tint, transparent);
+  pointer-events: none;
 }
 
 .detail h2 {
