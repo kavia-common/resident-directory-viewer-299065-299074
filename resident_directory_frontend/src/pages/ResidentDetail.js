@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import residents from '../data/residents.json';
-import { initialsFromName } from '../utils';
+import { initialsFromName, getResidentAvatarUrl, avatarAltText } from '../utils';
 
 /**
  * PUBLIC_INTERFACE
@@ -23,18 +23,21 @@ function ResidentDetail() {
   }
 
   const initials = initialsFromName(resident.name);
+  const avatarUrl = getResidentAvatarUrl(resident);
+  const alt = avatarAltText(resident.name);
 
   return (
     <article className="detail">
       <Link className="back-link" to="/">← Back to list</Link>
       <div className="detail-header">
-        {resident.avatar ? (
+        {avatarUrl ? (
           <img
-            src={resident.avatar}
+            src={avatarUrl}
             className="detail-avatar"
-            alt={`${resident.name}'s avatar`}
+            alt={alt}
             width="72"
             height="72"
+            loading="lazy"
           />
         ) : (
           <div className="detail-avatar" aria-hidden="true">{initials}</div>

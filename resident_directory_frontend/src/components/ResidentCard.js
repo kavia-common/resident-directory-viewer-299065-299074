@@ -1,26 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { initialsFromName } from '../utils';
+import { initialsFromName, getResidentAvatarUrl, avatarAltText } from '../utils';
 
 /**
  * PUBLIC_INTERFACE
  * ResidentCard renders a resident summary as a card.
- * Props: resident { id, name, unit, tags, avatar }
+ * Props: resident { id, name, unit, tags, avatar/image }
  */
 function ResidentCard({ resident }) {
   const initials = initialsFromName(resident.name);
+  const avatarUrl = getResidentAvatarUrl(resident);
+  const alt = avatarAltText(resident.name);
 
   return (
     <article className="card" data-testid={`resident-card-${resident.id}`}>
       <Link to={`/resident/${resident.id}`} aria-label={`View details for ${resident.name}`}>
         <div className="card-header">
-          {resident.avatar ? (
+          {avatarUrl ? (
             <img
-              src={resident.avatar}
-              alt={`${resident.name}'s avatar`}
+              src={avatarUrl}
+              alt={alt}
               className="avatar"
               width="48"
               height="48"
+              loading="lazy"
             />
           ) : (
             <div className="avatar" aria-hidden="true">{initials}</div>
