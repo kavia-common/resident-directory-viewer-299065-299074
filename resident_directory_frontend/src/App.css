@@ -34,8 +34,9 @@
   --avatar-bg: #fff7ed;
   --avatar-text: #9a3412;
   --avatar-border: #fed7aa;
-  --avatar-ring: rgba(249,115,22,0.15);
-  --avatar-ring-lg: rgba(249,115,22,0.18);
+  /* Subtle ring for list; slightly stronger for detail in light mode */
+  --avatar-ring: rgba(249,115,22,0.14);
+  --avatar-ring-lg: rgba(249,115,22,0.2);
   /* No tint overlay in light mode */
   --avatar-overlay: transparent;
 
@@ -79,8 +80,9 @@ html[data-theme="dark"] {
   --avatar-text: #ffedd5;
   --avatar-border: rgba(249,115,22,0.5);
   /* Slightly reduce ring intensity in dark for subtle separation without overpowering */
-  --avatar-ring: rgba(249,115,22,0.24);
-  --avatar-ring-lg: rgba(249,115,22,0.28);
+  /* Dark mode rings: a bit clearer than light to maintain definition on dark surfaces */
+  --avatar-ring: rgba(249,115,22,0.26);
+  --avatar-ring-lg: rgba(249,115,22,0.3);
   /* Provide a very subtle, theme-aware overlay to improve contrast for photos on dark */
   --avatar-overlay: linear-gradient(0deg, rgba(0,0,0,0.06), rgba(0,0,0,0.06));
 
@@ -276,7 +278,8 @@ main.app-main {
 /* Avatars */
 /* Shared avatar base variables used for both image and initials placeholder */
 .avatar {
-  --avatar-ring-size: 2px;
+  /* Slightly smaller ring for list view avatars for subtlety */
+  --avatar-ring-size: 1.5px;
   --avatar-tint: transparent; /* default no tint on light */
   width: 48px;
   height: 48px;
@@ -289,15 +292,18 @@ main.app-main {
   font-weight: 700;
   border: 1px solid var(--avatar-border);
   object-fit: cover;
-  /* Use box-shadow to render the outer ring. Keep Electric Orange in light via var --avatar-ring */
+  /* Use box-shadow to render the outer ring. Keep Electric Orange via theme vars */
   box-shadow: 0 0 0 var(--avatar-ring-size) var(--avatar-ring);
   position: relative;
   overflow: hidden; /* allow pseudo overlay to be clipped to rounded corners */
+
+  /* Interaction: gentle scale + ring glow on hover/focus-within with reduced motion respect */
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
 
-/* Apply a subtle overlay/tint only in dark mode using a pseudo-element.
+/* Theme-aware subtle overlay/tint only in dark mode using a pseudo-element.
    This maintains image detail while improving separation on dark surfaces.
-   For placeholders (divs with initials), this overlay is still useful to keep parity with image avatars. */
+   For placeholders (divs with initials), the overlay keeps parity with image avatars. */
 html[data-theme="dark"] .avatar {
   --avatar-tint: var(--avatar-overlay);
 }
@@ -307,6 +313,44 @@ html[data-theme="dark"] .avatar::after {
   inset: 0;
   background: var(--avatar-tint, transparent);
   pointer-events: none;
+}
+
+/* Hover/focus effects applied to the avatar itself and when the card/link is focused */
+.card a:hover .avatar,
+.card a:focus .avatar,
+.card a:focus-visible .avatar,
+.avatar:hover,
+.avatar:focus,
+.avatar:focus-visible {
+  /* Keep clear focus outlines: use box-shadow for glow; do not remove default outline unless focus-visible provided */
+  box-shadow:
+    0 0 0 var(--avatar-ring-size) var(--avatar-ring),
+    0 0 0 calc(var(--avatar-ring-size) + 2px) rgba(249,115,22,0.18);
+  transform: translateZ(0) scale(1.02);
+  border-color: var(--hover-border);
+}
+
+/* Stronger glow for detail avatar */
+.card a:hover .detail-avatar,
+.card a:focus .detail-avatar,
+.card a:focus-visible .detail-avatar,
+.detail-avatar:hover,
+.detail-avatar:focus,
+.detail-avatar:focus-visible {
+  box-shadow:
+    0 0 0 var(--avatar-ring-size) var(--avatar-ring-lg),
+    0 0 0 calc(var(--avatar-ring-size) + 2px) rgba(249,115,22,0.22);
+  transform: translateZ(0) scale(1.015);
+  border-color: var(--hover-border);
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .avatar,
+  .detail-avatar {
+    transition: none;
+    transform: none;
+  }
 }
 
 .card h3 {
@@ -359,6 +403,7 @@ html[data-theme="dark"] .avatar::after {
   align-items: center;
 }
 .detail-avatar {
+  /* Slightly thicker ring on detail to communicate emphasis */
   --avatar-ring-size: 3px;
   --avatar-tint: transparent; /* default no tint on light */
   width: 72px;
@@ -373,10 +418,13 @@ html[data-theme="dark"] .avatar::after {
   font-size: 24px; /* large text meets >=3:1 */
   border: 1px solid var(--avatar-border);
   object-fit: cover;
-  /* Larger ring for detail view using theme-aware color */
+  /* Larger ring for detail view using theme-aware color (slightly higher opacity var in dark) */
   box-shadow: 0 0 0 var(--avatar-ring-size) var(--avatar-ring-lg);
   position: relative;
   overflow: hidden;
+
+  /* Align transitions with list avatars for consistent interactions */
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
 
 /* Subtle tint in dark mode for detail avatar as well */
