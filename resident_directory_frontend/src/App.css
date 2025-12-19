@@ -281,6 +281,7 @@ main.app-main {
   width: 48px;
   height: 48px;
   border-radius: 12px;
+  /* Use avatar theme tokens so both images and placeholders match theme */
   background: var(--avatar-bg);
   color: var(--avatar-text);
   display: grid;
@@ -295,7 +296,8 @@ main.app-main {
 }
 
 /* Apply a subtle overlay/tint only in dark mode using a pseudo-element.
-   This maintains image detail while improving separation on dark surfaces. */
+   This maintains image detail while improving separation on dark surfaces.
+   For placeholders (divs with initials), this overlay is still useful to keep parity with image avatars. */
 html[data-theme="dark"] .avatar {
   --avatar-tint: var(--avatar-overlay);
 }
@@ -362,6 +364,7 @@ html[data-theme="dark"] .avatar::after {
   width: 72px;
   height: 72px;
   border-radius: 16px;
+  /* Use avatar theme tokens so both images and placeholders match theme */
   background: var(--avatar-bg);
   color: var(--avatar-text);
   display: grid;
